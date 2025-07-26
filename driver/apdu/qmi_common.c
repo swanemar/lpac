@@ -48,6 +48,14 @@ int qmi_apdu_interface_transmit(struct euicc_ctx *ctx, uint8_t **rx, uint32_t *r
         return -1;
     }
 
+    /* Printing raw QMI data */
+    fprintf(stderr, "[QMI][RX]");
+    for (guint i = 0; i < apdu_res->len; i++)
+    {
+        fprintf(stderr, " %02x", apdu_res->data[i]);
+    }
+    fprintf(stderr, "\n");
+
     /* Convert response GArray into rx */
     *rx_len = apdu_res->len;
     *rx = malloc(*rx_len);
