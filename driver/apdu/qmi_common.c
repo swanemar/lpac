@@ -30,7 +30,13 @@ int qmi_apdu_interface_transmit(struct euicc_ctx *ctx, uint8_t **rx, uint32_t *r
     qmi_message_uim_send_apdu_input_unref(input);
 
     if (!qmi_message_uim_send_apdu_output_get_result(output, &error))
-    {
+    {  
+        // Checking if qmi error 68 is thrown
+        if (error->code == QMI_PROTOCOL_ERROR_INSUFFICIENT_RESOURCES)
+        {
+            fprintf(stderr, "Warning: insufficient resources, bypassing\n");
+            // cath the exception somehow
+        }
         fprintf(stderr, "error: send apdu operation failed: %s\n", error->message);
         return -1;
     }
